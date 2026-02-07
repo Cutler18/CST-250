@@ -1,0 +1,2 @@
+Car, Ford, Explorer, 2021, 32000, 4, 21.7, 3, False, 8.4
+Motorcycle, Harley Davidson, Sportster 1200C, 20135145, 2, 40.3, 4,False, 28.3
