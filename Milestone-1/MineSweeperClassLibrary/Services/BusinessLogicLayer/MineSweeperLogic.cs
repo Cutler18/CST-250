@@ -1,0 +1,247 @@
+﻿using MineSweeperClassLibrary.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MineSweeperClassLibrary.Services.BusinessLogicLayer
+{
+    public class MineSweeperLogic
+    {
+        /// <summary>
+        /// Reset the cells to the default values for a new game.
+        /// </summary>
+        /// <param name="board"></param>
+        /// <returns></returns>
+        public BoardModel ResetBoard(BoardModel board)
+        {
+            // Use a foreach loop to iterate over every cell
+            foreach (CellModel cell in board.Grid)
+            {
+                // Set the properties to their defaults
+                cell.IsMine = false;
+                cell.IsRevealed = false;
+            }
+
+            // Return the board back to presentation layer
+            return board;
+        } // End of ResetBoard method
+
+        /// <summary>
+        /// Determine if location is on the board.
+        /// </summary>
+        /// <param name="board"></param>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <returns></returns>
+        public bool IsOnBoard(BoardModel board, int row, int column)
+        {
+            // Get the size of the board
+            int size = board.Size;
+
+            // Check if the row is on the board
+            bool IsRowSafe = row >= 0 && row < size;
+
+            // Check if the column is on the board
+            bool IsColumnSafe = column >= 0 && column < size;
+
+            // Return true if both row and column are safe
+            return IsRowSafe && IsColumnSafe;
+        } // End of IsOnBoard method
+
+        /// <summary>
+        /// Start a new game
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public BoardModel StartNewGame(int size)
+        {
+            // Create a new board model with the given size
+            BoardModel board = new BoardModel(size);
+            // Reset the board to the default values
+            return ResetBoard(board);
+        } // End of StartNewGame method
+
+        /// <summary>
+        /// Place the mines randomly on the board
+        /// </summary>
+        /// <param name="board"></param>
+        /// <param name="numberOfMines"></param>
+        public void PlaceMines(BoardModel board, int numberOfMines)
+        {
+            // Get the size of the board
+            int size = board.Size;
+            // Create a random number generator
+            Random random = new Random();
+            // Loop until the desired number of mines are placed
+            for (int i = 0; i < numberOfMines; i++)
+            {
+                // Generate random row and column indices
+                int row = random.Next(size);
+                int column = random.Next(size);
+                // Check if the cell is already a mine
+                if (!board.Grid[row, column].IsMine)
+                {
+                    // Place a mine in the cell
+                    board.Grid[row, column].IsMine = true;
+                }
+                else
+                {
+                    // If the cell already has a mine, decrement i to try again
+                    i--;
+                }
+            }
+        } // End of PlaceMines method
+
+        /// <summary>
+        /// Determine the number of mines based on the difficulty level
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public int NumberOfMines(int difficultyLevel)
+        {
+            // Declare and initialize
+            int size = 0;
+            int numOfMines = 0;
+
+            // Calculate the number of mines based on the size of the board
+            if (difficultyLevel == 1)
+            {
+                size = 10;
+            }
+            else if (difficultyLevel == 2)
+            {
+                size = 15;
+            }
+            else if (difficultyLevel == 3)
+            {
+                size = 20;
+            }
+            // Set the number of mines
+            numOfMines = (int)(size * size * 0.1);
+            // Return the number of mines based on the difficulty level
+            return numOfMines;
+        } // End of NumberOfMines method
+
+        /// <summary>
+        /// Count the number of adjacent mines for a given cell
+        /// </summary>
+        /// <param name="board"></param>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <returns></returns>
+        public int CountAdjacentMines(BoardModel board, int row, int column)
+        {
+            // Define the directions to check for adjacent cells
+            int[] directions = { -1, 0, 1 };
+            int mineCount = 0;
+            // Loop through each direction
+            foreach (int dRow in directions)
+            {
+                foreach (int dCol in directions)
+                {
+                    // Skip the current cell
+                    if (dRow == 0 && dCol == 0)
+                        continue;
+                    int newRow = row + dRow;
+                    int newCol = column + dCol;
+                    // Check if the new position is on the board
+                    if (IsOnBoard(board, newRow, newCol))
+                    {
+                        // Check if the adjacent cell is a mine
+                        if (board.Grid[newRow, newCol].IsMine)
+                        {
+                            mineCount++;
+                        }
+                    }
+                }
+            }
+            return mineCount;
+        } // End of CountAdjacentMines method
+
+        /// <summary>
+        /// Determine if the game is over
+        /// </summary>
+        /// <param name="board"></param>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <returns></returns>
+        public bool IsGameOver(BoardModel board, int row, int column)
+        {
+            // Check if the cell is a mine
+            if (board.Grid[row, column].IsMine)
+            {
+                return true; // Game over
+            }
+            return false; // Game continues
+        } // End of IsGameOver method
+
+        /// <summary>
+        /// Determine if the game is won
+        /// </summary>
+        /// <param name="board"></param>
+        /// <returns></returns>
+        public bool IsGameWon(BoardModel board)
+        {
+            // Loop through each cell in the grid
+            foreach (CellModel cell in board.Grid)
+            {
+                // If the cell is not a mine and has not been revealed, the game is not won
+                if (!cell.IsMine && !cell.IsRevealed)
+                {
+                    // Game not won
+                    return false;
+                }
+            }
+            // Game won
+            return true;
+        } // End of IsGameWon method
+
+        /// <summary>
+        /// Reveal the cell and its adjacent cells if there are no adjacent mines
+        /// </summary>
+        /// <param name="board"></param>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        public void RevealCell(BoardModel board, int row, int column)
+        {
+            // Check if the cell is on the board
+            if (!IsOnBoard(board, row, column))
+            {
+                return;
+            }
+            CellModel cell = board.Grid[row, column];
+            // If the cell is already revealed, do nothing
+            if (cell.IsRevealed)
+            {
+                return;
+            }
+
+            // Reveal the cell
+            cell.IsRevealed = true;
+
+            // Determine if it is game over
+            if (IsGameOver(board, row, column))
+            {
+                // Handle game over logic here (e.g., reveal all mines, show game over message)
+                return;
+            }
+
+            // If the cell has no adjacent mines, reveal adjacent cells
+            if (CountAdjacentMines(board, row, column) == 0)
+            {
+                int[] directions = { -1, 0, 1 };
+                foreach (int dRow in directions)
+                {
+                    foreach (int dCol in directions)
+                    {
+                        if (dRow == 0 && dCol == 0)
+                            continue;
+                        RevealCell(board, row + dRow, column + dCol);
+                    }
+                }
+            }
+        }
+    } // End of MineSweeperLogic class
+}
