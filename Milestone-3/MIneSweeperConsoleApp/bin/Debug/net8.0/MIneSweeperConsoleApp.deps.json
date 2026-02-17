@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "MIneSweeperConsoleApp/1.0.0": {
+        "dependencies": {
+          "MineSweeperClassLibrary": "1.0.0"
+        },
+        "runtime": {
+          "MIneSweeperConsoleApp.dll": {}
+        }
+      },
+      "MineSweeperClassLibrary/1.0.0": {
+        "runtime": {
+          "MineSweeperClassLibrary.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MIneSweeperConsoleApp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MineSweeperClassLibrary/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
