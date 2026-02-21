@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PizzaMaker/PizzaMaker.csproj" />
+  <Project Path="PizzaMakerClassLibrary/PizzaMakerClassLibrary.csproj" />
+</Solution>

@@ -1,0 +1,77 @@
+Name: Jacob
+Ingredients: Pepperoni, Sausage
+Strange Add Ons: Garlic, BBQ Sauce
+Crust: Thin Crust
+Sauce: 60
+Cheese: 100
+Delivery Time: 2/21/2026 1:19:38 PM
+Pizza Box Color: Color [A=255, R=0, G=128, B=255]
+Price: 17.00
+
+
+Name: James
+Ingredients: Bacon, Olives, Mushrooms
+Strange Add Ons: Arugula, Anchovies
+Crust: Unknown
+Sauce: 3
+Cheese: 36
+Delivery Time: 3/1/2026 12:00:00 AM
+Pizza Box Color: Color [A=255, R=255, G=128, B=64]
+Price: 17.50
+
+
+Name: Bill
+Ingredients: Pepperoni, Pineapple
+Strange Add Ons: 
+Crust: Deep Dish
+Sauce: 17
+Cheese: 54
+Delivery Time: 2/26/2026 12:00:00 AM
+Pizza Box Color: Color [A=255, R=255, G=128, B=128]
+Price: 16.00
+
+
+Name: Unknown
+Ingredients: 
+Strange Add Ons: 
+Crust: Unknown
+Sauce: 0
+Cheese: 0
+Delivery Time: 1/1/2025 12:00:00 AM
+Pizza Box Color: Color [White]
+Price: 15.00
+
+
+Name: Unknown
+Ingredients: 
+Strange Add Ons: 
+Crust: Unknown
+Sauce: 0
+Cheese: 0
+Delivery Time: 2/21/2026 1:22:06 PM
+Pizza Box Color: Color [White]
+Price: 15.00
+
+
+Name: Unknown
+Ingredients: 
+Strange Add Ons: 
+Crust: Unknown
+Sauce: 0
+Cheese: 0
+Delivery Time: 2/21/2026 1:22:07 PM
+Pizza Box Color: Color [White]
+Price: 15.00
+
+
+Name: Unknown
+Ingredients: 
+Strange Add Ons: 
+Crust: Unknown
+Sauce: 0
+Cheese: 0
+Delivery Time: 2/21/2026 1:22:07 PM
+Pizza Box Color: Color [White]
+Price: 15.00
+
+

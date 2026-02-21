@@ -1,0 +1,11 @@
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\bin\Debug\net10.0\PizzaMakerClassLibrary.deps.json
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\bin\Debug\net10.0\PizzaMakerClassLibrary.dll
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\bin\Debug\net10.0\PizzaMakerClassLibrary.pdb
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\obj\Debug\net10.0\PizzaMakerClassLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\obj\Debug\net10.0\PizzaMakerClassLibrary.AssemblyInfoInputs.cache
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\obj\Debug\net10.0\PizzaMakerClassLibrary.AssemblyInfo.cs
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\obj\Debug\net10.0\PizzaMakerClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\obj\Debug\net10.0\PizzaMakerClassLibrary.dll
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\obj\Debug\net10.0\refint\PizzaMakerClassLibrary.dll
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\obj\Debug\net10.0\PizzaMakerClassLibrary.pdb
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 4\Program\PizzaMaker\PizzaMakerClassLibrary\obj\Debug\net10.0\ref\PizzaMakerClassLibrary.dll
