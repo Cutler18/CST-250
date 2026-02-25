@@ -1,0 +1,17 @@
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\bin\Debug\net10.0-windows\WhackAMole.exe
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\bin\Debug\net10.0-windows\WhackAMole.deps.json
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\bin\Debug\net10.0-windows\WhackAMole.runtimeconfig.json
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\bin\Debug\net10.0-windows\WhackAMole.dll
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\bin\Debug\net10.0-windows\WhackAMole.pdb
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.FrmStopWatch.resources
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.csproj.GenerateResource.cache
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.AssemblyInfoInputs.cache
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.AssemblyInfo.cs
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.csproj.CoreCompileInputs.cache
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.dll
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\refint\WhackAMole.dll
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.pdb
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.genruntimeconfig.cache
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\ref\WhackAMole.dll
+C:\Users\cutle\OneDrive\Documents\GCU\CST250\Activity 5\Program\WhackAMole\WhackAMole\obj\Debug\net10.0-windows\WhackAMole.Properties.Resources.resources
