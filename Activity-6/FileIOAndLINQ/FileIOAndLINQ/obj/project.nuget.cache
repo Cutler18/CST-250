@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "9VxzJMeyUVA=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\cutle\\OneDrive\\Documents\\GCU\\CST250\\Activity 6\\Program\\FileIOAndLINQ\\FileIOAndLINQ\\FileIOAndLINQ.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\cutle\\.nuget\\packages\\servicestack.text\\10.0.6\\servicestack.text.10.0.6.nupkg.sha512"
+  ],
+  "logs": []
+}

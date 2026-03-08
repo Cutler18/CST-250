@@ -1,0 +1,549 @@
+﻿/*
+ * Jacob Cutler
+ * CST-250
+ * 03/08/2026
+ * File I/O and LINQ
+ * Activity 6
+ */
+
+using FileIOAndLINQ.Models;
+using FileIOAndLINQ.Services.BusinessLogicLayer;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+
+namespace FileIOAndLINQ.PresentationLayer
+{
+    public partial class FrmVerseList : Form
+    {
+        // Declare class level variables
+        private List<Label> _errorLabels;
+        // Flags for user input
+        bool isValidBook = false, isValidChapter = false, isValidVerse = false;
+        bool isValidText = false, isValidMeaning = false, isValidImportance = false;
+        // Busines logic variable
+        private VerseLogic _verseLogic;
+        // Binding source for the data grid view
+        private BindingSource _verseBindingSource;
+        // Filters for file dialogs
+        string filter = "All Files (*.*)|*.*|" +
+                "Text File (*.txt)|*.txt|" +
+                "CSV File (*.csv)|*.csv|" +
+                "JSON File (*.json)|*.json|" +
+                "XML File (*.xml)|*.xml";
+        // Store the number of verses to show
+        private int _numToShow;
+
+        /// <summary>
+        /// Default constructor for FrmVerseList
+        /// </summary>
+        public FrmVerseList()
+        {
+            // Initialize the form
+            InitializeComponent();
+            // Initialize and hide the error list
+            InitializeErrors();
+            // Initialize the combo box books
+            InitializeBooks();
+            // Initialize the verse logic variable
+            _verseLogic = new VerseLogic();
+            // Intialize the binding source object
+            _verseBindingSource = new BindingSource();
+            // Set the number to show track bar max to 0
+            trbNumberToShow.Maximum = 0;
+        } // End of FrmVerseList
+
+        /// <summary>
+        /// Initialize the errors list
+        /// </summary>
+        private void InitializeErrors()
+        {
+            // Initialize the error label list
+            _errorLabels = new List<Label>
+            {
+                lblVerseBookError, lblVerseChapterError,
+                lblVerseVerseError, lblVerseTextError,
+                lblVerseMeaningError, lblVerseImportanceError
+            };
+            // Loop through the error label list
+            foreach (Label errorLabel in _errorLabels)
+            {
+                // Hide each label
+                errorLabel.Visible = false;
+            }
+        } // End of InitializeErrors method
+
+        /// <summary>
+        /// Set up the verse book combo box
+        /// </summary>
+        private void InitializeBooks()
+        {
+            // Set up a list of books of the bible
+            List<string> bibleBooks = new List<string>
+            {
+                // Old Testament
+                "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
+                "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
+                "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra",
+                "Nehemiah", "Esther", "Job", "Psalms", "Proverbs",
+                "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations",
+                "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah",
+                "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi",
+
+                // New Testament
+                "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians",
+                "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians",
+                "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus",
+                "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John",
+                "3 John", "Jude", "Revelation"
+            };
+            // Populate cmbVerseBook with the list
+            cmbVerseBook.DataSource = bibleBooks;
+            // Set the automatically selected book to -1 (none)
+            cmbVerseBook.SelectedIndex = -1;
+            // Set the combo box to suggest books based on the user typing
+            cmbVerseBook.AutoCompleteMode = AutoCompleteMode.Suggest;
+            // Set the autocomplete source to the list items
+            cmbVerseBook.AutoCompleteSource = AutoCompleteSource.ListItems;
+        } // End of IntializeBooks method
+
+        /// <summary>
+        /// Clear the input fields used to add a verse
+        /// </summary>
+        public void ClearInputFields()
+        {
+            // Clear the book combo box
+            cmbVerseBook.SelectedIndex = -1;
+            // Clear the textboxes in grpAddVerse
+            foreach (TextBox textBox in grpAddVerse.Controls.OfType<TextBox>())
+            {
+                // Clear the textbox
+                textBox.Clear();
+            }
+            // Reset the numeric up-down control
+            nudVerseImportance.Value = 0;
+        } // End of ClearInputFields method
+
+        /// <summary>
+        /// Refresh the verese data grid view
+        /// </summary>
+        public void RefreshVersesDgv()
+        {
+            // Get the verses from the business logic layer
+            List<VerseDisplayModel> verses = _verseLogic.GetAllVerses();
+            // Set the data source for the binding source object
+            _verseBindingSource.DataSource = verses;
+
+            // Format the data grid view
+            FormatVersesDgv();
+
+            // Update the maximum for the number to show track bar
+            trbNumberToShow.Maximum = verses.Count;
+        } // End of RefreshVersesDgv method
+
+        /// <summary>
+        /// Format the verses data grid view
+        /// </summary>
+        private void FormatVersesDgv()
+        {
+            // Calculate the width for the text and meaning columns
+            int width = (dgvVerseDisplay.Width - dgvVerseDisplay.Columns[0].Width - dgvVerseDisplay.Columns[3].Width) / 2;
+            // Set the width for the text column
+            dgvVerseDisplay.Columns[1].Width = width;
+            // Set the width for the meaning column
+            dgvVerseDisplay.Columns[2].Width = width;
+            // Set the default cell style so text will wrap
+            dgvVerseDisplay.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            // Call the auto resize row method so the rows will expand
+            dgvVerseDisplay.AutoResizeRows();
+        } // End of FomatVersesDgv method
+
+        /// <summary>
+        /// Leave event handler for the book combo box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CmbVerseBookLeaveEH(object sender, EventArgs e)
+        {
+            // Check if the user has selected a book
+            if (cmbVerseBook.SelectedIndex >= 0)
+            {
+                // Set the book flag to true
+                isValidBook = true;
+                // Hide the book error label
+                lblVerseBookError.Visible = false;
+            }
+            else
+            {
+                // Set the book flag to false
+                isValidBook = false;
+                // Update the book error label
+                lblVerseBookError.Text = "You Must Select a Book";
+                // Show the book error label
+                lblVerseBookError.Visible = true;
+            }
+        } // End of leave event handler for CmbVerseBook
+
+        /// <summary>
+        /// Leave event handler to make sure the user entered a number
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TxtVerseChapterLeaveEH(object sender, EventArgs e)
+        {
+            // Declare and initialize
+            Regex regex = new Regex("^[0-9]+$");
+            // Match object to hold the result of the RegEx comparison
+            Match match;
+
+            // Compare the regex pattern to the textbox text
+            match = regex.Match(txtVerseChapter.Text);
+            // Check if the match was a success
+            if (match.Success)
+            {
+                // Set the chapter flag to true
+                isValidChapter = true;
+                // Hide the chapter error label
+                lblVerseChapterError.Visible = false;
+            }
+            else
+            {
+                // Set the chapter flag to false
+                isValidChapter = false;
+                // Update the text for the chapter error label
+                lblVerseChapterError.Text = "The Chapter Must Be a Number";
+                // Show the chapter error label
+                lblVerseChapterError.Visible = true;
+            }
+        } // End of leave event handler for TxtVerseChapter
+
+        /// <summary>
+        /// Leave event handler to validate verse input from the user
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TxtVerseVerseLeaveEH(object sender, EventArgs e)
+        {
+            // Declare and initialize
+            // Regex pattern to validate the verse
+            Regex regex = new Regex(@"^\d+(?:-\d+)?$");
+            // Match object to hold the result of the comparison
+            bool match;
+
+            // Match the RegEx pattern with the verse text
+            match = regex.IsMatch(txtVerseVerse.Text);
+            // Check if the match was a success
+            if (match)
+            {
+                // Set the verse flag to true
+                isValidVerse = true;
+                // Hide the verse error label
+                lblVerseBookError.Visible = false;
+            }
+            else
+            {
+                // Set the verse flag to false
+                isValidVerse = false;
+                // Update the verse error label
+                lblVerseVerseError.Text = "The verse must be a number/range";
+                // Show the verse error label
+                lblVerseVerseError.Visible = true;
+            }
+        } // End of leave event handler for txtVerseVerse
+
+        /// <summary>
+        /// Leave event handler for txtVerseText
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TxtVerseTextLeaveEH(object sender, EventArgs e)
+        {
+            // Check to make sure the user entered text for the verse
+            if (!string.IsNullOrWhiteSpace(txtVerseText.Text))
+            {
+                // Set the valid text flag to true
+                isValidText = true;
+                // Hide the error label
+                lblVerseTextError.Visible = false;
+            }
+            else
+            {
+                // Make sure the valid text flag is false
+                isValidText = false;
+                // Update the error label
+                lblVerseTextError.Text = "The text cannot be blank";
+                // Show the error label
+                lblVerseTextError.Visible = true;
+            }
+        } // End of leave event handler for txtVerseText
+
+        /// <summary>
+        /// Leave event handler for txtVerseMeaning
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TxtVerseMeaningLeaveEH(object sender, EventArgs e)
+        {
+            // Check to make sure the user entered a meaning for the verse
+            if (!string.IsNullOrWhiteSpace(txtVerseMeaning.Text))
+            {
+                // Set the valid meaning flag to true
+                isValidMeaning = true;
+                // Hide the error label
+                lblVerseMeaningError.Visible = false;
+            }
+            else
+            {
+                // Make sure the valid meaning flag is false
+                isValidMeaning = false;
+                // Update the error label
+                lblVerseMeaningError.Text = "The meaning cannot be blank";
+                // Show the error label
+                lblVerseMeaningError.Visible = true;
+            }
+        } // End of leave event handler for txtVerseMeaning
+
+        /// <summary>
+        /// Leave event handler to validate importance input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NudVerseImportanceLeaveEH(object sender, EventArgs e)
+        {
+            // Check if the value is between 1 and 10
+            if (nudVerseImportance.Value >= 1 && nudVerseImportance.Value <= 10)
+            {
+                // Set the importance flag to true
+                isValidImportance = true;
+                // Hide the importance error label
+                lblVerseImportanceError.Visible = true;
+            }
+            else
+            {
+                // Set the importance flag to false
+                isValidImportance = false;
+                // Update the importance error label
+                lblVerseImportanceError.Text = "The importance must be 1 - 10";
+                // Show the importance error label
+                lblVerseImportanceError.Visible = true;
+            }
+        } // End of leave event handler for the nudVerseImportance
+
+        /// <summary>
+        /// Click event handler for BtnAddVerse
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnAddVerseClickEH(object sender, EventArgs e)
+        {
+            // Declare and initialize
+            int chapter = -1;
+            VerseRequestModel verse;
+
+            // Check the flags to see if the user has entered valid data
+            if (isValidBook && isValidChapter && isValidVerse && isValidText && isValidMeaning && isValidImportance)
+            {
+                // Set up a try-catch to cast the chapter to an int
+                try
+                {
+                    // Parse the chapter to an int
+                    chapter = int.Parse(txtVerseChapter.Text);
+                }
+                catch (Exception)
+                {
+                    // Update the error label for the chapter
+                    lblVerseChapterError.Text = "The chapter must be a number";
+                    // Show the chapter error label
+                    lblVerseChapterError.Visible = true;
+                }
+                verse = new VerseRequestModel(cmbVerseBook.Text, chapter, txtVerseVerse.Text,
+                    txtVerseText.Text, txtVerseMeaning.Text, ((int)nudVerseImportance.Value));
+                // Add the new verse using the _verseLogic variable
+                _verseLogic.AddVerse(verse);
+                // Clear the input fields
+                ClearInputFields();
+                // Refresh the data grid view
+                RefreshVersesDgv();
+            }
+            // Check if the book is invalid
+            else if (!isValidBook)
+            {
+                // Show the book error label
+                lblVerseBookError.Visible = true;
+            }
+            // Check if the chapter is invalid
+            else if (!isValidChapter)
+            {
+                // Show the chapter error label
+                lblVerseChapterError.Visible = true;
+            }
+            // Check if the verse is invalid
+            else if (!isValidVerse)
+            {
+                // Show the verse error label
+                lblVerseVerseError.Visible = true;
+            }
+            // Check if the text is invalid
+            else if (!isValidText)
+            {
+                // Show the text error label
+                lblVerseTextError.Visible = true;
+            }
+            // Check if the meaning is invalid
+            else if (!isValidMeaning)
+            {
+                // Show the meaning error label
+                lblVerseMeaningError.Visible = true;
+            }
+            // Check if the importance is invalid
+            else if (!isValidImportance)
+            {
+                // Show the importance error label
+                lblVerseImportanceError.Visible = true;
+            }
+        } // End of BtnAddVerse click event handler
+
+        /// <summary>
+        /// Load event handler for FrmVerseList
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FrmVerseListLoadEH(object sender, EventArgs e)
+        {
+            // Set the data source for the data grid view
+            dgvVerseDisplay.DataSource = _verseBindingSource;
+        } // End of FrmVerseList load event handler
+
+        /// <summary>
+        /// Click event handler for tsmSave
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TsmSaveClickEH(object sender, EventArgs e)
+        {
+            // Declare and initialize
+            string fileName = "", result = "";
+            // Variable to store the result of the SaveFileDialog
+            DialogResult dialogResult;
+
+            // Create a save file dialog object
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                // Set the title for the dialog
+                saveFileDialog.Title = "Save File";
+                // Set the filter for the dialog
+                saveFileDialog.Filter = filter;
+                // Show the file dialog and save the result to dialogResult
+                dialogResult = saveFileDialog.ShowDialog();
+                // Check if the dialog result returned ok
+                if (dialogResult == DialogResult.OK)
+                {
+                    // Get the selected file name
+                    fileName = saveFileDialog.FileName;
+                    // Save the inventory to the text file
+                    result = _verseLogic.WriteVersesToFile(fileName);
+                    // Show the result to the user
+                    MessageBox.Show(result);
+                }
+            }
+        } // End of event handler for tsmSave
+
+        /// <summary>
+        /// Click event handler for tsmLoad
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TsmLoadClickEH(object sender, EventArgs e)
+        {
+            // Declare and initialize
+            string fileName = "", result = "";
+            DialogResult dialogResult;
+
+            // Create an open file dialog
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                // Set the title for the dialog
+                openFileDialog.Title = "Save File";
+                // Set the filter for the dialog
+                openFileDialog.Filter = filter;
+                // Show the file dialog and store the result
+                dialogResult = openFileDialog.ShowDialog();
+                // Check to make sure the file dialog returned OK
+                if (dialogResult == DialogResult.OK)
+                {
+                    // Get the file name from the file dialog
+                    fileName = openFileDialog.FileName;
+                    // Read the file to add the verses to the verse inventory
+                    result = _verseLogic.ReadVersesFromFile(fileName);
+                    // Display the result in a message box
+                    MessageBox.Show(result);
+                    // Refresh the data grid view
+                    RefreshVersesDgv();
+                }
+            }
+        } // End of TsmLoadClickEH method
+
+        /// <summary>
+        /// Update the _numToShow variable and the most/least importance verses radio buttons
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TrbNumberToShowScrollEH(object sender, EventArgs e)
+        {
+            // Update _numToShow
+            _numToShow = trbNumberToShow.Value;
+            // Update the text for rdoShowLeastImportanct
+            rdoShowLeastImportant.Text = $"Show {_numToShow} Least Important";
+            // Update the text for rdoShowMostImportant
+            rdoShowMostImportant.Text = $"Show {_numToShow} Most Important";
+        } // End of TrbNumberToShowScrollEH method
+
+        /// <summary>
+        /// Display the least important verses to the user
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RdoShowLeastImportantCheckChangedEH(object sender, EventArgs e)
+        {
+            // Get the list of least important objects from the BLL
+            List<VerseDisplayModel> leastImportantVerses = _verseLogic.GetLeastImportantVerses(_numToShow);
+            // Change the DataSource for the verse binding source
+            _verseBindingSource.DataSource = leastImportantVerses;
+
+            // Format the data grid view
+            FormatVersesDgv();
+        } // End of RdoShowLeastImportantCheckChangedEh method
+
+        /// <summary>
+        /// Display the most important verses to the user
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RdoShowMostImportantCheckedChangedEH(object sender, EventArgs e)
+        {
+            // Get the list of most important verses from the BLL
+            List<VerseDisplayModel> mostImportantVerses = _verseLogic.GetMostImportantVerses(_numToShow);
+            // Change the DataSource for the verse binding source
+            _verseBindingSource.DataSource = mostImportantVerses;
+
+            // Format the data grid view
+            FormatVersesDgv();
+        } // End of RdoShowMostImportantCheckedChangedEH method
+
+        /// <summary>
+        /// Show the entire, unsorted list of verses
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RdoShowAllCheckedChangedEH(object sender, EventArgs e)
+        {
+            // Refresh the dgv with all of the users verses
+            RefreshVersesDgv();
+        } // End of RdoShowAllCheckedChangedEH method
+    }
+}
