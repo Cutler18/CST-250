@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MineSweeperClassLibrary.Test/MineSweeperClassLibrary.Test.csproj" />
+  <Project Path="MineSweeperClassLibrary/MineSweeperClassLibrary.csproj" />
+  <Project Path="MIneSweeperConsoleApp/MIneSweeperConsoleApp.csproj" DisplayName="MineSweeperConsoleApp" />
+  <Project Path="MineSweeperGUI/MineSweeperGUI.csproj" Id="c694b255-1951-4528-99b5-c11836af4a4c" />
+</Solution>
